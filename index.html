@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartFlow - Automação Inteligente de E-mails - Solução GCP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.0/dist/mermaid.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Gradiente de fundo mais suave */
+            background: linear-gradient(135deg, #e0f7fa 0%, #f0f4f8 100%); /* Light cyan to light blue-gray */
+            color: #334155; /* slate-700 for main text */
+        }
+        
+        .gcp-card {
+            background: white;
+            border-radius: 1rem; /* 16px */
+            /* Sombra mais suave */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e2e8f0; /* slate-200 */
+        }
+        
+        .gcp-card:hover {
+            transform: translateY(-5px);
+            /* Sombra de hover mais suave */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gcp-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin: 0 auto 16px;
+        }
+        
+        /* Cores dos ícones GCP ajustadas para serem mais suaves */
+        .gcp-functions { background: linear-gradient(135deg, #4a8ee2, #6aa9eb); } /* Blue */
+        .gcp-pubsub { background: linear-gradient(135deg, #6aa9eb, #87d0f0); } /* Lighter blue */
+        .gcp-gmail { background: linear-gradient(135deg, #87d0f0, #4a8ee2); } /* Cyan to blue */
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: -30px;
+            width: 2px;
+            /* Linha da timeline mais suave */
+            background: linear-gradient(to bottom, #94a3b8, #cbd5e1); /* slate-400 to slate-300 */
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            /* Ponto da timeline mais suave */
+            background: #2563eb; /* blue-600 */
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #94a3b8; /* slate-400 */
+        }
+        
+        .cost-highlight {
+            /* Fundo do destaque de custo mais suave */
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff); /* light blue to very light blue */
+            color: #1e293b; /* slate-900 for contrast */
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 20px 0;
+            border: 1px solid #bfdbfe; /* blue-200 */
+        }
+        
+        .benefit-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            /* Sombra mais suave */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            border-left: 4px solid #60a5fa; /* blue-400 */
+        }
+        
+        .architecture-diagram {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            /* Sombra mais suave */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .service-badge {
+            display: inline-block;
+            /* Fundo mais claro e texto com bom contraste */
+            background: #e2e8f0; /* slate-200 */
+            color: #334155; /* slate-700 */
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 4px;
+        }
+        
+        .hero-section {
+            /* Gradiente do hero mais suave */
+            background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%); /* blue-400 to blue-300 */
+            color: white;
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 20px;
+            /* Gradiente de texto mantido, mas com tons mais suaves */
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6); /* blue-700 to blue-500 */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .mermaid {
+            width: 100%;
+            height: auto;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        /* Ajustes de cores para o diagrama Mermaid */
+        .mermaid .node rect, .mermaid .node circle, .mermaid .node polygon {
+            stroke: #94a3b8 !important; /* slate-400 */
+            stroke-width: 2px !important;
+            fill: #f8fafc !important; /* slate-50 */
+        }
+        .mermaid .node text {
+            fill: #334155 !important; /* slate-700 */
+        }
+        .mermaid .edgePath .path {
+            stroke: #64748b !important; /* slate-600 */
+            stroke-width: 1.5px !important;
+        }
+        .mermaid .label text {
+            fill: #334155 !important; /* slate-700 */
+        }
+
+        .engineering-logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            /* Sombra mais suave */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mvp-highlight {
+            /* Fundo e borda mais suaves */
+            background: linear-gradient(135deg, #e0f7fa, #ffffff); /* very light cyan to white */
+            border: 2px solid #a7d9f7; /* light blue */
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+            color: #334155; /* slate-700 */
+        }
+        .mvp-highlight h2, .mvp-highlight h3 {
+            color: #1e293b !important; /* slate-900 */
+        }
+        .mvp-highlight ul li {
+            color: #475569; /* slate-600 */
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-section">
+        <div class="container mx-auto px-6 text-center">
+            <div class="engineering-logo">
+                <i class="fas fa-cogs" style="font-size: 32px; color: #2563eb;"></i> </div>
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-6">
+                SmartFlow - Automação Inteligente de E-mails
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+                Solução Serverless com Google Cloud Platform
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <span class="service-badge">Cloud Functions</span>
+                <span class="service-badge">Pub/Sub</span>
+                <span class="service-badge">Gmail API</span>
+            </div>
+        </div>
+    </section>
+
+    <main class="container mx-auto px-6 py-16">
+        <section class="mb-20">
+            <div class="text-center max-w-4xl mx-auto mb-12">
+                <h2 class="section-title">O Desafio Atual</h2>
+                <p class="text-lg text-gray-700 leading-relaxed mb-8">
+                    Processamento manual de e-mails com dados críticos (CPF/CNPJ, nomes e anexos PDF) 
+                    consome tempo valioso da equipe, é propenso a erros e não escala com o crescimento do negócio.
+                </p>
+            </div>
+            
+            <div class="text-center max-w-4xl mx-auto">
+                <h2 class="section-title">Nossa Solução</h2>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    Automação completa usando arquitetura serverless do GCP que monitora e-mails em tempo real, 
+                    extrai dados automaticamente e envia informações estruturadas para sistemas de destino.
+                </p>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <div class="mvp-highlight">
+                <h2 class="text-2xl font-bold text-center mb-6">🎯 MVP - Produto Mínimo Viável</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Objetivo do MVP:</h3>
+                        <p class="text-gray-700 mb-4">
+                            Criar uma infraestrutura completa no GCP com serviços serverless que automatize 
+                            o processamento de e-mails recebidos.
+                        </p>
+                        <ul class="text-gray-600 space-y-2">
+                            <li>• <strong>Cloud Function</strong> que extrai automaticamente:</li>
+                            <li>&nbsp;&nbsp;- Nome do cliente</li>
+                            <li>&nbsp;&nbsp;- CNPJ/CPF</li>
+                            <li>&nbsp;&nbsp;- Anexos PDF (convertidos para Base64)</li>
+                            <li>• <strong>Geração de JSON</strong> estruturado com os dados extraídos</li>
+                            <li>• <strong>Envio automático</strong> para endpoint do Smart Milk</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Entregáveis:</h3>
+                        <ul class="text-gray-600 space-y-3">
+                            <li>✅ <strong>Infraestrutura GCP</strong> configurada e funcional</li>
+                            <li>✅ <strong>Cloud Functions</strong> desenvolvidas e testadas</li>
+                            <li>✅ <strong>Integração Gmail API</strong> funcionando</li>
+                            <li>✅ <strong>Sistema Pub/Sub</strong> configurado</li>
+                            <li>✅ <strong>Endpoint de destino</strong> preparado para receber JSON</li>
+                            <li>✅ <strong>Documentação completa</strong> e treinamento</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <h2 class="section-title">Arquitetura da Solução</h2>
+            <div class="architecture-diagram">
+                <div id="architecture-diagram" class="mermaid">
+graph TD
+    subgraph "Fluxo de Entrada"
+        A["📧 E-mail do Cliente<br/>Outlook"] --> B["⚙️ Regra de Encaminhamento<br/>Outlook"]
+        B --> C["📬 Conta Gmail<br/>Google Workspace"]
+    end
+    
+    subgraph "Google Cloud Platform"
+        C --> D["🔔 Gmail API<br/>Push Notifications"]
+        D --> E["📨 Pub/Sub<br/>email-chegou"]
+        E --> F["⚡ Cloud Function<br/>processa-email"]
+    end
+    
+    subgraph "Processamento"
+        F --> H["🔍 Extração de Dados<br/>CPF/CNPJ + Nome"]
+        F --> I["📄 Decodificação PDF<br/>Base64"]
+        F --> J["📋 Montagem JSON<br/>Estrutura Final"]
+    end
+    
+    subgraph "Saída"
+        J --> K["🌐 Endpoint Smart Milk<br/>Sistema de Destino"]
+    end
+    
+    classDef entrada fill:#e0f2fe,stroke:#90cdf4,stroke-width:2px,color:#2b6cb0;
+    classDef gcp fill:#ebf8ff,stroke:#63b3ed,stroke-width:2px,color:#2c5282;
+    classDef processamento fill:#f0fff4,stroke:#68d391,stroke-width:2px,color:#2d3748;
+    classDef saida fill:#fffaf0,stroke:#f6ad55,stroke-width:2px,color:#7b341e;
+    
+    class A,B,C entrada;
+    class D,E,F gcp;
+    class H,I,J processamento;
+    class K saida;
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <h2 class="section-title">Serviços Google Cloud Utilizados</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="gcp-card p-6 text-center">
+                    <div class="gcp-icon gcp-functions">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Cloud Functions</h3>
+                    <p class="text-gray-600 mb-4">
+                        Função serverless que processa e-mails, extrai dados e envia JSON para endpoint.
+                    </p>
+                    <ul class="text-sm text-gray-500 text-left">
+                        <li>• Extração de CPF/CNPJ</li>
+                        <li>• Decodificação de PDFs</li>
+                        <li>• Montagem de JSON</li>
+                        <li>• Envio para endpoint</li>
+                    </ul>
+                </div>
+
+                <div class="gcp-card p-6 text-center">
+                    <div class="gcp-icon gcp-pubsub">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Pub/Sub</h3>
+                    <p class="text-gray-600 mb-4">
+                        Sistema de mensageria que garante entrega confiável dos eventos de e-mail.
+                    </p>
+                    <ul class="text-sm text-gray-500 text-left">
+                        <li>• Fila de mensagens</li>
+                        <li>• Retry automático</li>
+                        <li>• Dead letter queue</li>
+                        <li>• Escalabilidade automática</li>
+                    </ul>
+                </div>
+
+                <div class="gcp-card p-6 text-center">
+                    <div class="gcp-icon gcp-gmail">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Gmail API</h3>
+                    <p class="text-gray-600 mb-4">
+                        API que monitora a conta de e-mail e detecta novos e-mails em tempo real.
+                    </p>
+                    <ul class="text-sm text-gray-500 text-left">
+                        <li>• Push notifications</li>
+                        <li>• Acesso a anexos</li>
+                        <li>• Filtros de e-mail</li>
+                        <li>• Autenticação OAuth</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <h2 class="section-title">Benefícios da Solução</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="benefit-card">
+                    <div class="text-4xl mb-4">💰</div>
+                    <h3 class="font-bold text-lg mb-2">Custo-Benefício</h3>
+                    <p class="text-gray-600 text-sm">
+                        Custo operacional baixo. Paga apenas pelo uso real dos recursos.
+                    </p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="text-4xl mb-4">📈</div>
+                    <h3 class="font-bold text-lg mb-2">Escalabilidade</h3>
+                    <p class="text-gray-600 text-sm">
+                        Suporta de dezenas a milhões de e-mails sem intervenção manual.
+                    </p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="font-bold text-lg mb-2">Velocidade</h3>
+                    <p class="text-gray-600 text-sm">
+                        Processamento em tempo real. Dados disponíveis em segundos.
+                    </p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="text-4xl mb-4">🛡️</div>
+                    <h3 class="font-bold text-lg mb-2">Confiabilidade</h3>
+                    <p class="text-gray-600 text-sm">
+                        99.9% de disponibilidade com retry automático e dead letter queues.
+                    </p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="text-4xl mb-4">🔧</div>
+                    <h3 class="font-bold text-lg mb-2">Baixa Manutenção</h3>
+                    <p class="text-gray-600 text-sm">
+                        Sem servidores para gerenciar. Foco no desenvolvimento de funcionalidades.
+                    </p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="text-4xl mb-4">🔒</div>
+                    <h3 class="font-bold text-lg mb-2">Segurança</h3>
+                    <p class="text-gray-600 text-sm">
+                        Criptografia end-to-end e controle de acesso granular.
+                    </p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="text-4xl mb-4">🚀</div>
+                    <h3 class="font-bold text-lg mb-2">Time-to-Market</h3>
+                    <p class="text-gray-600 text-sm">
+                        Implementação rápida em 15 dias com MVP funcional.
+                    </p>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="font-bold text-lg mb-2">Integração</h3>
+                    <p class="text-gray-600 text-sm">
+                        JSON estruturado pronto para integração com Smart Milk.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <h2 class="section-title">Análise de Custos Reais</h2>
+            <p class="text-center text-lg text-gray-600 mb-8">
+                Para um volume de <strong>1.000 e-mails com PDFs por mês</strong>
+            </p>
+            
+            <div class="cost-highlight">
+                <h3 class="text-2xl font-bold mb-2">Custo Total Mensal: R$ 2,50</h3>
+                <p class="text-lg opacity-90">Custos reais considerando preços atuais do GCP</p>
+            </div>
+
+            <div class="gcp-card p-8">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Serviço</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Uso Estimado</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Custo Mensal (USD)</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Custo Mensal (BRL)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cloud Functions</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1.000 invocações, ~125 GB-segundos</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.0007</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R$ 0,003</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Pub/Sub</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1.000 mensagens, 1.000 deliveries</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.40</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R$ 2,00</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Gmail API</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1.000 requests (acima do limite gratuito)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.10</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R$ 0,50</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Data Transfer</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1.000 requisições outbound (~0.1GB)</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">$0.00</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R$ 0,00</td>
+                        </tr>
+                        <tr class="bg-blue-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-base font-bold text-gray-900">Total Operacional Mensal</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-base text-gray-700 font-bold">$0.5007</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-base text-gray-700 font-bold">R$ 2,50</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-8 gcp-card p-8">
+                <h3 class="text-2xl font-bold mb-6 text-center">Investimento em Desenvolvimento</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="text-center">
+                        <div class="text-4xl font-bold mb-2" style="color: #2563eb;">R$ 25.000</div>
+                        <p class="text-gray-600">Desenvolvimento do MVP</p>
+                        <ul class="text-sm text-gray-500 mt-4 text-left">
+                            <li>• Configuração da arquitetura GCP</li>
+                            <li>• Desenvolvimento das Cloud Functions</li>
+                            <li>• Integração com Gmail API</li>
+                            <li>• Setup do sistema Pub/Sub</li>
+                            <li>• Testes e validação</li>
+                            <li>• Documentação técnica</li>
+                        </ul>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-4xl font-bold mb-2" style="color: #60a5fa;">15 dias</div>
+                        <p class="text-gray-600">Prazo de entrega</p>
+                        <ul class="text-sm text-gray-500 mt-4 text-left">
+                            <li>• MVP funcional e testado</li>
+                            <li>• Treinamento da equipe</li>
+                            <li>• Suporte pós-implantação</li>
+                            <li>• Documentação completa</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <h2 class="section-title">Cronograma do MVP (15 dias)</h2>
+            <div class="gcp-card p-8">
+                <div class="timeline-item">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">Dia 1-2: Setup e Configuração Inicial</h3>
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">2 dias</span>
+                    </div>
+                    <p class="text-gray-600 mb-3">Configuração do ambiente GCP e credenciais</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Criação do projeto GCP</li>
+                        <li>• Habilitação das APIs necessárias</li>
+                        <li>• Configuração de Service Accounts</li>
+                        <li>• Setup da conta Gmail dedicada</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">Dia 3-5: Desenvolvimento Core</h3>
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">3 dias</span>
+                    </div>
+                    <p class="text-gray-600 mb-3">Desenvolvimento das Cloud Functions principais</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Cloud Function de processamento de e-mail</li>
+                        <li>• Lógica de extração de CPF/CNPJ</li>
+                        <li>• Decodificação de anexos PDF</li>
+                        <li>• Montagem do JSON final</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">Dia 6-8: Integração e Pub/Sub</h3>
+                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">3 dias</span>
+                    </div>
+                    <p class="text-gray-600 mb-3">Configuração do sistema de mensageria</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Setup do Pub/Sub</li>
+                        <li>• Integração com Gmail API</li>
+                        <li>• Configuração de push notifications</li>                        
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">Dia 9-11: Integração Externa</h3>
+                        <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">3 dias</span>
+                    </div>
+                    <p class="text-gray-600 mb-3">Integração com endpoint do Smart Milk</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Desenvolvimento da integração com endpoint</li>
+                        <li>• Implementação de autenticação</li>
+                        <li>• Testes de conectividade</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">Dia 12-13: Testes e Validação</h3>
+                        <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">2 dias</span>
+                    </div>
+                    <p class="text-gray-600 mb-3">Apoio os Testes do sistema</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Testes unitários das funções</li>
+                        <li>• Testes de integração end-to-end</li>
+                        <li>• Validação da extração de dados</li>
+                        <li>• Testes de envio de JSON</li>
+                    </ul>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-lg font-bold text-gray-800">Dia 14-15: Deploy e Documentação</h3>
+                        <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">2 dias</span>
+                    </div>
+                    <p class="text-gray-600 mb-3">Deploy em produção e entrega final</p>
+                    <ul class="text-sm text-gray-500 space-y-1">
+                        <li>• Deploy em ambiente de produção</li>
+                        <li>• Documentação técnica completa</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <h2 class="section-title">Simulação de Retorno sobre Investimento (ROI)</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="gcp-card p-6 text-center">
+                    <div class="text-4xl font-bold mb-2" style="color: #2563eb;">R$ 25.000</div>
+                    <h3 class="text-lg font-bold mb-2">Investimento Inicial</h3>
+                    <p class="text-gray-600 text-sm">Desenvolvimento do MVP</p>
+                </div>
+                
+                <div class="gcp-card p-6 text-center">
+                    <div class="text-4xl font-bold mb-2" style="color: #60a5fa;">R$ 2,50</div>
+                    <h3 class="text-lg font-bold mb-2">Custo Mensal</h3>
+                    <p class="text-gray-600 text-sm">Operação da solução</p>
+                </div>
+                
+                <div class="gcp-card p-6 text-center">
+                    <div class="text-4xl font-bold mb-2" style="color: #93c5fd;">3-6 meses</div>
+                    <h3 class="text-lg font-bold mb-2">Payback</h3>
+                    <p class="text-gray-600 text-sm">Economia em tempo da equipe</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 gcp-card p-8">
+                <h3 class="text-xl font-bold mb-4 text-center">Economia Estimada</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold mb-3">Antes da Automação:</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• 2 horas/dia processando e-mails manualmente</li>
+                            <li>• 40 horas/mês por pessoa</li>
+                            <li>• Custo: R$ 2.000/mês (salário + benefícios)</li>
+                            <li>• Erros humanos: 5-10% dos casos</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-3">Após a Automação:</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• Processamento automático em segundos</li>
+                            <li>• 0 horas/mês de processamento manual</li>
+                            <li>• Custo operacional: R$ 2,50/mês</li>
+                            <li>• Precisão: 99,9% dos casos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20">
+            <h2 class="section-title">Próximos Passos</h2>
+            <div class="gcp-card p-8">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Para o Time Comercial:</h3>
+                        <ol class="space-y-3 text-gray-700">
+                            <li class="flex items-start">
+                                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">1</span>
+                                <span>Aprovação do investimento de R$ 25.000</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">2</span>
+                                <span>Definição do endpoint de destino do Smart Milk</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">3</span>
+                                <span>Configuração da conta Gmail dedicada</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">4</span>
+                                <span>Setup das regras de encaminhamento no Outlook</span>
+                            </li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Para o Time Técnico:</h3>
+                        <ol class="space-y-3 text-gray-700">
+                            <li class="flex items-start">
+                                <span class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">1</span>
+                                <span>Configuração do projeto GCP</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">2</span>
+                                <span>Desenvolvimento das Cloud Functions</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">3</span>
+                                <span>Implementação do sistema Pub/Sub</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">4</span>
+                                <span>Testes e deploy em produção</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-white py-12" style="background-color: #1e293b;"> <div class="container mx-auto px-6 text-center">
+            <div class="engineering-logo mb-6" style="background-color: #334155;"> <i class="fas fa-cogs" style="font-size: 32px; color: #60a5fa;"></i> </div>
+            <h3 class="text-2xl font-bold mb-4">Pronto para Automatizar?</h3>
+            <p class="text-gray-300 mb-6">
+                Transforme o processamento manual de e-mails em uma solução automatizada, 
+                escalável e econômica com Google Cloud Platform.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <span class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium">
+                    Investimento: R$ 25.000
+                </span>
+                <span class="bg-green-600 text-white px-6 py-3 rounded-lg font-medium">
+                    Prazo: 15 dias
+                </span>
+                <span class="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium">
+                    ROI: 3-6 meses
+                </span>
+            </div>
+            <p class="text-gray-400 mt-6 text-sm">
+                Engineering Brasil - Soluções Tecnológicas Inovadoras
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize Mermaid
+            mermaid.initialize({ 
+                startOnLoad: true, 
+                securityLevel: 'loose',
+                theme: 'neutral', // 'neutral' theme for softer colors
+                themeVariables: {
+                    // Adjust mermaid theme variables for softer look
+                    '--mermaid-font-family': 'Inter, sans-serif',
+                    'primaryColor': '#e0f2fe', // Light blue for main nodes
+                    'secondaryColor': '#bfdbfe', // Lighter blue
+                    'tertiaryColor': '#dbeafe', // Even lighter blue
+                    'primaryTextColor': '#334155', // Darker text
+                    'secondaryTextColor': '#475569',
+                    'tertiaryTextColor': '#64748b',
+                    'lineColor': '#94a3b8', // Slate-400 for lines
+                    'mainBkg': '#ffffff', // White background for the diagram itself
+                    'nodeBorder': '#94a3b8', // Slate-400 node borders
+                    'clusterBkg': '#f8fafc', // Very light slate for clusters
+                    'clusterBorder': '#cbd5e1' // Slate-300 for cluster borders
+                },
+                flowchart: {
+                    useMaxWidth: true,
+                    htmlLabels: true
+                }
+            });
+        });
+    </script>
+</body>
