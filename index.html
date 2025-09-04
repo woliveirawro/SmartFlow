@@ -249,7 +249,7 @@
                             <li>&nbsp;&nbsp;- CNPJ/CPF</li>
                             <li>&nbsp;&nbsp;- Anexos PDF (convertidos para Base64)</li>
                             <li>• <strong>Geração de JSON</strong> estruturado com os dados extraídos</li>
-                            <li>• <strong>Envio automático</strong> para endpoint do Smart Milk</li>
+                            <li>• <strong>Envio automático</strong> para endpoint do SmartFlow</li>
                         </ul>
                     </div>
                     <div>
@@ -289,9 +289,9 @@ graph TD
         F --> J["📋 Montagem JSON<br/>Estrutura Final"]
     end
     
-    subgraph "Saída"
-        J --> K["🌐 Endpoint Smart Milk<br/>Sistema de Destino"]
-    end
+         subgraph "Saída"
+         J --> K["🌐 Endpoint SmartFlow<br/>Sistema de Destino"]
+     end
     
     classDef entrada fill:#e0f2fe,stroke:#90cdf4,stroke-width:2px,color:#2b6cb0;
     classDef gcp fill:#ebf8ff,stroke:#63b3ed,stroke-width:2px,color:#2c5282;
@@ -422,7 +422,7 @@ graph TD
                     <div class="text-4xl mb-4">📊</div>
                     <h3 class="font-bold text-lg mb-2">Integração</h3>
                     <p class="text-gray-600 text-sm">
-                        JSON estruturado pronto para integração com Smart Milk.
+                        JSON estruturado pronto para integração com SmartFlow.
                     </p>
                 </div>
             </div>
@@ -562,7 +562,7 @@ graph TD
                         <h3 class="text-lg font-bold text-gray-800">Dia 9-11: Integração Externa</h3>
                         <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">3 dias</span>
                     </div>
-                    <p class="text-gray-600 mb-3">Integração com endpoint do Smart Milk</p>
+                    <p class="text-gray-600 mb-3">Integração com endpoint do SmartFlow</p>
                     <ul class="text-sm text-gray-500 space-y-1">
                         <li>• Desenvolvimento da integração com endpoint</li>
                         <li>• Implementação de autenticação</li>
@@ -658,7 +658,7 @@ graph TD
                             </li>
                             <li class="flex items-start">
                                 <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">2</span>
-                                <span>Definição do endpoint de destino do Smart Milk</span>
+                                <span>Definição do endpoint de destino do SmartFlow</span>
                             </li>
                             <li class="flex items-start">
                                 <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-3 mt-0.5">3</span>
